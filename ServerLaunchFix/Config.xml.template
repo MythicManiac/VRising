@@ -1,0 +1,5 @@
+﻿<Project>
+  <PropertyGroup>
+    <UnhollowedDllPath>C:\Add\Your\Path\Here\To\BepInEx\unhollowed</UnhollowedDllPath>
+  </PropertyGroup>
+</Project>
