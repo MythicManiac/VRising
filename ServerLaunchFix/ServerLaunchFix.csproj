@@ -1,33 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net6.0</TargetFramework>
         <AssemblyName>ServerLaunchFix</AssemblyName>
         <BepInExPluginGuid>dev.mythic.vrising.serverlaunchfix</BepInExPluginGuid>
         <Description>Enables server-side mods when launching the built-in server.</Description>
-        <Version>0.1.0</Version>
+        <Version>0.2.0</Version>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>latest</LangVersion>
     </PropertyGroup>
 
-    <Import Project="Config.xml" />
-
     <ItemGroup>
-        <PackageReference Include="BepInEx.IL2CPP" Version="6.0.0-*" IncludeAssets="compile" />
+        <PackageReference Include="BepInEx.Unity.IL2CPP" Version="6.0.0-be*" IncludeAssets="compile" />
+        <PackageReference Include="BepInEx.Core" Version="6.0.0-be*" IncludeAssets="compile" />
         <PackageReference Include="BepInEx.PluginInfoProps" Version="1.*" />
-    </ItemGroup>
-
-    <ItemGroup>
-        <Reference Include="IL2Cppmscorlib">
-            <HintPath>$(UnhollowedDllPath)\Il2Cppmscorlib.dll</HintPath>
-        </Reference>
-
-        <Reference Include="ProjectM.Shared">
-            <HintPath>$(UnhollowedDllPath)\ProjectM.Shared.dll</HintPath>
-        </Reference>
-
-        <Reference Include="UnityEngine.CoreModule">
-            <HintPath>$(UnhollowedDllPath)\UnityEngine.CoreModule.dll</HintPath>
-        </Reference>
+        <PackageReference Include="VRising.Unhollowed.Client" Version="0.6.0.57108*" />
     </ItemGroup>
 </Project>
