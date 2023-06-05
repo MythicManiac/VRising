@@ -2,9 +2,10 @@ name: Build
 
 on:
   push:
-    branches: ["main"]
+    branches: ["main", "master"]
   pull_request:
-    branches: ["main"]
+    branches: ["main", "master"]
+
 env:
   PROJECT_PATH: ServerLaunchFix/ServerLaunchFix.csproj
   OUTPUT_PATH: ./ServerLaunchFix/bin/Release/net6.0/ServerLaunchFix.dll
