@@ -4,7 +4,7 @@ schemaVersion = "0.0.1"
 [package]
 namespace = "Mythic"
 name = "ServerLaunchFix"
-versionNumber = "0.1.0"
+versionNumber = "0.2.0"
 description = "Enable mods for single player and host & play"
 websiteUrl = "https://github.com/MythicManiac/VRising"
 containsNsfwContent = false
