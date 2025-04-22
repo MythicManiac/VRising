@@ -60,3 +60,4 @@ jobs:
           fail_on_unmatched_files: true
           prerelease: true
           tag_name: v${{ env.GitVersion_SemVer }}
+
