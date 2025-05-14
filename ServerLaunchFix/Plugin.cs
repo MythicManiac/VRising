@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Runtime.InteropServices;
 using BepInEx;
-using BepInEx.IL2CPP;
 using UnityEngine;
 using HarmonyLib;
 using ProjectM.Shared;
@@ -39,14 +37,6 @@ namespace ServerLaunchFix
     {
         public static readonly ServerLaunchFix Instance = new();
         private readonly Stack<Dictionary<string, string>> _environmentStack = new();
-
-        [DllImport("kernel32.dll")]
-        static extern bool CreateSymbolicLink(string lpSymlinkFileName, string lpTargetFileName, SymbolicLink dwFlags);
-        private enum SymbolicLink
-        {
-            File = 0,
-            Directory = 1
-        }
 
         private const string DoorstopConfig = @"
 # General options for Unity Doorstop
@@ -161,7 +151,7 @@ Enabled = false
                 }
                 else
                 {
-                    JunctionPoint.Create(Path.GetFullPath(destination), Path.GetFullPath(entry), true);
+                    DirectoryLink.Create(Path.GetFullPath(destination), Path.GetFullPath(entry), true);
                 }
             }
 
