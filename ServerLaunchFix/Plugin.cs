@@ -10,7 +10,7 @@ using BepInEx.Unity.IL2CPP;
 
 namespace ServerLaunchFix
 {
-    [BepInPlugin(PluginInfo.PLUGIN_GUID, PluginInfo.PLUGIN_NAME, PluginInfo.PLUGIN_VERSION)]
+    [BepInPlugin(MyPluginInfo.PLUGIN_GUID, MyPluginInfo.PLUGIN_NAME, MyPluginInfo.PLUGIN_VERSION)]
     public class ServerLaunchFixPlugin : BasePlugin
     {
         public static ServerLaunchFixPlugin Instance;
@@ -19,7 +19,7 @@ namespace ServerLaunchFix
         {
             if (ServerLaunchFix.IsClient)
             {
-                _harmony = new Harmony(PluginInfo.PLUGIN_GUID);
+                _harmony = new Harmony(MyPluginInfo.PLUGIN_GUID);
                 _harmony.PatchAll();
             }
 
@@ -88,6 +88,23 @@ coreclr_path = ..\dotnet\coreclr.dll
 # Path to the directory containing the managed core libraries for CoreCLR (mscorlib, System, etc.)
 corlib_dir = ..\dotnet
 ";
+        private const string BepInExConfigWine = @"
+[IL2CPP]
+
+## Whether to run Il2CppInterop automatically to generate Il2Cpp support assemblies when they are outdated.
+## If disabled assemblies in `BepInEx/interop` won't be updated between game or BepInEx updates!
+## 
+# Setting type: Boolean
+# Default value: true
+UpdateInteropAssemblies = false
+
+[Logging.Console]
+
+## Enables showing a console for log output.
+# Setting type: Boolean
+# Default value: false
+Enabled = false
+";
         private const string BepInExConfig = @"
 [Logging.Console]
 
@@ -149,13 +166,24 @@ Enabled = false
                 {
                     RecursiveCopyIfNewer(entry, destination);
                 }
+                else if (PlatformDetector.IsRunningOnWine() &&
+                         name is "core" or "patchers" or "plugins" or "unity-libs")
+                {
+                    RecursiveCopyIfNewer(entry, destination);
+                    File.WriteAllText(Path.Combine(serverBepInExDir, "config", "BepInEx.cfg"), BepInExConfigWine);
+                }
                 else
                 {
-                    DirectoryLink.Create(Path.GetFullPath(destination), Path.GetFullPath(entry), true);
+                    if (!PlatformDetector.IsRunningOnWine())
+                    {
+                        var fullDestination = Path.GetFullPath(destination);
+                        var fullSource = Path.GetFullPath(entry);
+                        ServerLaunchFixPlugin.Instance.Log.LogInfo($"Creating junction point from {fullSource} to {fullDestination}");
+                        JunctionPoint.Create(fullDestination, fullSource, true);
+                        File.WriteAllText(Path.Combine(serverBepInExDir, "config", "BepInEx.cfg"), BepInExConfig);
+                    }
                 }
             }
-
-            File.WriteAllText(Path.Combine(serverBepInExDir, "config", "BepInEx.cfg"), BepInExConfig);
             return Path.Combine(serverBepInExDir, "core", "BepInEx.Unity.IL2CPP.dll");
         }
 
